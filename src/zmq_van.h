@@ -141,7 +141,7 @@ class ZMQVan : public Van {
     void *socket = it->second;
 
     // send meta
-    int meta_size; char* meta_buf;
+    size_t meta_size; char* meta_buf;
     PackMeta(msg.meta, &meta_buf, &meta_size);
     int tag = ZMQ_SNDMORE;
     int n = msg.data.size();
@@ -154,16 +154,17 @@ class ZMQVan : public Van {
       return -1;
     }
     // zmq_msg_close(&meta_msg);
-    int send_bytes = meta_size;
+    size_t send_bytes = meta_size;
     // send data
     for (int i = 0; i < n; ++i) {
       zmq_msg_t data_msg;
       SArray<char>* data = new SArray<char>(msg.data[i]);
-      int data_size = data->size();
+      size_t data_size = data->size();
       zmq_msg_init_data(&data_msg, data->data(), data->size(), FreeData, data);
       if (i == n - 1) tag = 0;
       while (true) {
-        if (zmq_msg_send(&data_msg, socket, tag) == data_size) break;
+        // if (zmq_msg_send(&data_msg, socket, tag) == data_size) break;
+        if (zmq_msg_send(&data_msg, socket, tag) != -1) break;
         if (errno == EINTR) continue;
         LOG(WARNING) << "failed to send message to node [" << id
                      << "] errno: " << errno << " " << zmq_strerror(errno)

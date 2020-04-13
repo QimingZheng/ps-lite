@@ -474,7 +474,7 @@ void Van::PackMetaPB(const Meta& meta, PBMeta* pb) {
   pb->set_data_size(meta.data_size);
 }
 
-void Van::PackMeta(const Meta& meta, char** meta_buf, int* buf_size) {
+void Van::PackMeta(const Meta& meta, char** meta_buf, size_t* buf_size) {
   // convert into protobuf
   PBMeta pb;
   pb.set_head(meta.head);
@@ -514,7 +514,7 @@ void Van::PackMeta(const Meta& meta, char** meta_buf, int* buf_size) {
       << "failed to serialize protbuf";
 }
 
-void Van::UnpackMeta(const char* meta_buf, int buf_size, Meta* meta) {
+void Van::UnpackMeta(const char* meta_buf, size_t buf_size, Meta* meta) {
   // to protobuf
   PBMeta pb;
   CHECK(pb.ParseFromArray(meta_buf, buf_size))

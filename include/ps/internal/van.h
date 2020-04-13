@@ -109,7 +109,7 @@ class Van {
   /**
    * \brief pack meta into a string
    */
-  void PackMeta(const Meta &meta, char **meta_buf, int *buf_size);
+  void PackMeta(const Meta &meta, char **meta_buf, size_t *buf_size);
 
   /**
    * \brief pack meta into protobuf
@@ -119,7 +119,7 @@ class Van {
   /**
    * \brief unpack meta from a string
    */
-  void UnpackMeta(const char *meta_buf, int buf_size, Meta *meta);
+  void UnpackMeta(const char *meta_buf, size_t buf_size, Meta *meta);
 
   Node scheduler_;
   Node my_node_;
